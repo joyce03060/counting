@@ -3,11 +3,12 @@ import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import StatsPage from "./pages/StatsPage";
 import SettingsPage from "./pages/SettingsPage";
+import SnakeGame from "./components/SnakeGame";
 import { saveExpense, getExpensesByDate, getCustomCategories } from "./data/database";
 import { mergeCategories } from "./data/categories";
 import type { ExpenseRecord, NewExpense, Category } from "./data/types";
 
-type Tab = "home" | "stats" | "settings";
+type Tab = "home" | "stats" | "settings" | "game";
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>("home");
@@ -79,6 +80,9 @@ function App() {
           {activeTab === "settings" && (
             <span className="text-sm opacity-80">设置</span>
           )}
+          {activeTab === "game" && (
+            <span className="text-sm opacity-80">🐍 贪吃蛇</span>
+          )}
         </div>
       </header>
 
@@ -106,6 +110,11 @@ function App() {
         {activeTab === "settings" && (
           <div className="p-4">
             <SettingsPage onCategoriesChanged={handleCategoriesChanged} />
+          </div>
+        )}
+        {activeTab === "game" && (
+          <div className="p-4 h-full">
+            <SnakeGame />
           </div>
         )}
       </main>
@@ -141,6 +150,16 @@ function App() {
           }`}
         >
           ⚙️ 设置
+        </button>
+        <button
+          onClick={() => setActiveTab("game")}
+          className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
+            activeTab === "game"
+              ? "text-indigo-500 border-t-2 border-indigo-500 -mt-px"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          🎮 游戏
         </button>
       </nav>
     </div>
