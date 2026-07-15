@@ -1,4 +1,4 @@
-// 黑马记账 - 统计页面（月度汇总 + 饼图）
+// 记账app - 统计页面（月度汇总 + 饼图）
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { getMonthlyStats, getAllExpenses } from "../data/database";

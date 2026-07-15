@@ -64,7 +64,7 @@ function App() {
       {/* 顶部标题栏 */}
       <header className="bg-indigo-500 text-white px-5 py-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">黑马记账</h1>
+          <h1 className="text-xl font-bold">记账app</h1>
           {activeTab === "home" && todayTotal > 0 && (
             <span className="text-sm opacity-80">
               今日支出{" "}

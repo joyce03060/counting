@@ -1,4 +1,4 @@
-// 黑马记账 - 支出列表
+// 记账app - 支出列表
 import type { ExpenseRecord } from "../data/types";
 import { getCategoryIcon } from "../data/categories";
 

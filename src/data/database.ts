@@ -1,4 +1,4 @@
-// 黑马记账 - 数据库操作
+// 记账app - 数据库操作
 import Database from "@tauri-apps/plugin-sql";
 import type { ExpenseRecord, CustomCategory } from "./types";
 

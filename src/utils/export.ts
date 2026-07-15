@@ -1,4 +1,4 @@
-// 黑马记账 - CSV 导出
+// 记账app - CSV 导出
 import type { ExpenseRecord } from "../data/types";
 
 // 导出支出记录为 CSV 文件
@@ -44,7 +44,7 @@ export async function saveCSV(content: string, filename: string): Promise<void> 
 }
 
 // 生成导出文件名
-export function generateExportFilename(prefix: string = "黑马记账"): string {
+export function generateExportFilename(prefix: string = "记账app"): string {
   const now = new Date();
   const dateStr = now.toISOString().slice(0, 10);
   return `${prefix}_${dateStr}.csv`;

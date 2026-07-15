@@ -1,4 +1,4 @@
-// 黑马记账 - 类型定义
+// 记账app - 类型定义
 
 /** 一条支出记录 */
 export interface ExpenseRecord {

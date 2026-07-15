@@ -1,4 +1,4 @@
-// 黑马记账 - 两级分类选择器
+// 记账app - 两级分类选择器
 import { useState, useMemo } from "react";
 import type { Category } from "../data/types";
 

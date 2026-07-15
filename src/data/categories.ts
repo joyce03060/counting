@@ -1,4 +1,4 @@
-// 黑马记账 - 预设分类数据
+// 记账app - 预设分类数据
 import type { Category, CustomCategory } from "./types";
 
 // 10 大类 + 45 小类的完整分类体系（preset: true 表示不可删改）

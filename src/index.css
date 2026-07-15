@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* 黑马记账 - 全局样式 */
+/* 记账app - 全局样式 */
 :root {
   --color-primary: #6366f1;
   --color-bg: #f8fafc;

@@ -1,4 +1,4 @@
-// 黑马记账 - 设置页（自定义分类管理）
+// 记账app - 设置页（自定义分类管理）
 import { useState, useEffect, useCallback } from "react";
 import type { Category, CustomCategory } from "../data/types";
 import { PRESET_CATEGORIES } from "../data/categories";

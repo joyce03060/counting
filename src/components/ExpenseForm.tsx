@@ -1,4 +1,4 @@
-// 黑马记账 - 记账表单
+// 记账app - 记账表单
 import { useState } from "react";
 import CategoryPicker from "./CategoryPicker";
 import type { Category, NewExpense } from "../data/types";
