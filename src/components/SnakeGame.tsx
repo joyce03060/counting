@@ -1,5 +1,5 @@
 // 记账app - 贪吃蛇小游戏（react-konva Canvas 渲染）
-import { useReducer, useEffect, useRef, useState, useCallback } from "react";
+import { useReducer, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Stage, Layer, Rect, Circle } from "react-konva";
 import type { Position, Direction, GameState, GameAction } from "../data/snake-types";
 
@@ -14,12 +14,41 @@ const SPEED_MIN = 60; // 最快速度
 const FOODS_PER_LEVEL = 5; // 每吃 5 个食物升一级
 const HIGH_SCORE_KEY = "snake_high_score";
 
-// 颜色（匹配 app indigo 主题）
-const BG_COLOR = "#eef2ff"; // indigo-50
-const GRID_LINE_COLOR = "#e0e7ff"; // indigo-100
-const SNAKE_COLOR = "#a5b4fc"; // indigo-300
-const SNAKE_HEAD_COLOR = "#6366f1"; // indigo-500
-const FOOD_COLOR = "#ef4444"; // red-500
+/** 从 CSS 设计令牌读取颜色，读取失败时使用后备值（Konva 不能直接用 CSS 变量） */
+function getCSSColor(varName: string, fallback: string): string {
+  if (typeof document === "undefined") return fallback;
+  try {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(varName)
+      .trim();
+    return value || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+// 颜色（引用项目 CSS 设计令牌，匹配 app indigo 主题）
+const BG_COLOR = getCSSColor("--color-snake-bg", "#eef2ff"); // indigo-50
+const GRID_LINE_COLOR = getCSSColor("--color-snake-grid", "#e0e7ff"); // indigo-100
+const SNAKE_COLOR = getCSSColor("--color-snake-body", "#a5b4fc"); // indigo-300
+const SNAKE_HEAD_COLOR = getCSSColor("--color-primary", "#6366f1"); // indigo-500
+const FOOD_COLOR = getCSSColor("--color-danger", "#ef4444"); // red-500
+
+// 键盘 → 方向映射（模块级常量，只创建一次）
+const KEY_DIRECTION_MAP: Record<string, Direction> = {
+  ArrowUp: "UP",
+  ArrowDown: "DOWN",
+  ArrowLeft: "LEFT",
+  ArrowRight: "RIGHT",
+  w: "UP",
+  W: "UP",
+  s: "DOWN",
+  S: "DOWN",
+  a: "LEFT",
+  A: "LEFT",
+  d: "RIGHT",
+  D: "RIGHT",
+};
 
 // ==================== 工具函数 ====================
 
@@ -155,9 +184,6 @@ function snakeReducer(state: GameState, action: GameAction): GameState {
         score: newScore,
       };
     }
-
-    default:
-      return state;
   }
 }
 
@@ -166,6 +192,8 @@ function snakeReducer(state: GameState, action: GameAction): GameState {
 export default function SnakeGame() {
   const [state, dispatch] = useReducer(snakeReducer, null, createInitialState);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const gameStatusRef = useRef(state.gameStatus);
+  gameStatusRef.current = state.gameStatus;
 
   // 最高分（localStorage 持久化）
   const [highScore, setHighScore] = useState<number>(() => {
@@ -212,34 +240,16 @@ export default function SnakeGame() {
     };
   }, [state.gameStatus, speed]);
 
-  // 键盘控制
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (state.gameStatus !== "running") return;
+  // 键盘控制 — 通过 ref 读取最新 gameStatus，回调引用稳定不变
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (gameStatusRef.current !== "running") return;
 
-      const keyMap: Record<string, Direction> = {
-        ArrowUp: "UP",
-        ArrowDown: "DOWN",
-        ArrowLeft: "LEFT",
-        ArrowRight: "RIGHT",
-        w: "UP",
-        W: "UP",
-        s: "DOWN",
-        S: "DOWN",
-        a: "LEFT",
-        A: "LEFT",
-        d: "RIGHT",
-        D: "RIGHT",
-      };
-
-      const dir = keyMap[e.key];
-      if (dir) {
-        e.preventDefault();
-        dispatch({ type: "CHANGE_DIRECTION", direction: dir });
-      }
-    },
-    [state.gameStatus],
-  );
+    const dir = KEY_DIRECTION_MAP[e.key];
+    if (dir) {
+      e.preventDefault();
+      dispatch({ type: "CHANGE_DIRECTION", direction: dir });
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -251,28 +261,31 @@ export default function SnakeGame() {
     dispatch({ type: "START_GAME" });
   }, []);
 
-  // 渲染网格线
-  const gridLines = [];
-  for (let i = 0; i <= GRID_SIZE; i++) {
-    gridLines.push(
-      <Rect
-        key={`h${i}`}
-        x={0}
-        y={i * CELL_SIZE - 0.5}
-        width={CANVAS_SIZE}
-        height={1}
-        fill={GRID_LINE_COLOR}
-      />,
-      <Rect
-        key={`v${i}`}
-        x={i * CELL_SIZE - 0.5}
-        y={0}
-        width={1}
-        height={CANVAS_SIZE}
-        fill={GRID_LINE_COLOR}
-      />,
-    );
-  }
+  // 静态网格线（只创建一次）
+  const gridLines = useMemo(() => {
+    const lines: React.ReactElement[] = [];
+    for (let i = 0; i <= GRID_SIZE; i++) {
+      lines.push(
+        <Rect
+          key={`h${i}`}
+          x={0}
+          y={i * CELL_SIZE - 0.5}
+          width={CANVAS_SIZE}
+          height={1}
+          fill={GRID_LINE_COLOR}
+        />,
+        <Rect
+          key={`v${i}`}
+          x={i * CELL_SIZE - 0.5}
+          y={0}
+          width={1}
+          height={CANVAS_SIZE}
+          fill={GRID_LINE_COLOR}
+        />,
+      );
+    }
+    return lines;
+  }, []);
 
   const { snake, food, gameStatus, score } = state;
 
@@ -318,10 +331,10 @@ export default function SnakeGame() {
               fill={FOOD_COLOR}
             />
 
-            {/* 蛇身 */}
+            {/* 蛇身 — key 用稳定索引，让 react-konva 原地更新节点而非销毁重建 */}
             {snake.map((seg, i) => (
               <Rect
-                key={`${seg.x}-${seg.y}-${i}`}
+                key={i}
                 x={seg.x * CELL_SIZE + 1}
                 y={seg.y * CELL_SIZE + 1}
                 width={CELL_SIZE - 2}
