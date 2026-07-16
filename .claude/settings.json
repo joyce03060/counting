@@ -28,7 +28,17 @@
     ]
   },
   "hooks": {
-    "PreToolUse": [],
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File .claude/hooks/check-gate.ps1"
+          }
+        ]
+      }
+    ],
     "PostToolUse": []
   }
 }
