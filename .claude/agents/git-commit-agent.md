@@ -68,9 +68,17 @@ model: haiku
 提交信息：<commit message>
 ```
 
+3. **提交成功后，清理通行证**：用 PowerShell 删除 `.claude/results/` 目录下的所有标记文件：
+
+```powershell
+Remove-Item -Recurse -Force ".claude/results" -ErrorAction SilentlyContinue
+```
+
+> 通行证是"一次性"的——提交成功证明这次检查已用过，留着旧通行证会导致下次误判。
+
 #### 🔴 有失败时
 
-不提交。向用户汇报：
+不提交，**也不清理通行证**（保留现场供排查）。向用户汇报：
 
 ```
 🔴 质量门禁未通过，提交被拒绝
@@ -101,6 +109,9 @@ model: haiku
 | 标记文件格式损坏 | 报告 JSON 解析失败，停止 |
 | 两个检查都通过但无改动 | 交给 git-save 技能自己处理（它会报告"无需提交"） |
 | quality-engineer 只做了安全没做注释 | 检查 `comments_passed` 字段是否存在 |
+| 提交成功 | 清理 `.claude/results/`，通行证作废 |
+| 提交失败（推送被拒等） | 保留通行证，下次重试时需重新跑检查 |
+| 检查不通过 | 保留通行证，方便排查哪个环节没过 |
 
 ## 注意事项
 
