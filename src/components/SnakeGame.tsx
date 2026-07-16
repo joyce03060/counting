@@ -5,7 +5,7 @@ import type { Position, Direction, GameState, GameAction } from "../data/snake-t
 
 // ==================== 游戏常量 ====================
 
-const GRID_SIZE = 20;
+export const GRID_SIZE = 20;
 const CELL_SIZE = 20;
 const CANVAS_SIZE = GRID_SIZE * CELL_SIZE; // 400px
 const INITIAL_SPEED = 150; // ms/步
@@ -27,12 +27,12 @@ function getCSSColor(varName: string, fallback: string): string {
   }
 }
 
-// 颜色（引用项目 CSS 设计令牌，匹配 app indigo 主题）
-const BG_COLOR = getCSSColor("--color-snake-bg", "#eef2ff"); // indigo-50
-const GRID_LINE_COLOR = getCSSColor("--color-snake-grid", "#e0e7ff"); // indigo-100
-const SNAKE_COLOR = getCSSColor("--color-snake-body", "#a5b4fc"); // indigo-300
-const SNAKE_HEAD_COLOR = getCSSColor("--color-primary", "#6366f1"); // indigo-500
-const FOOD_COLOR = getCSSColor("--color-danger", "#ef4444"); // red-500
+// 颜色（引用项目 CSS 设计令牌，匹配杂志极简风暖色调）
+const BG_COLOR = getCSSColor("--color-snake-bg", "#f5f2ed"); // 暖米灰
+const GRID_LINE_COLOR = getCSSColor("--color-snake-grid", "#ebe7e0"); // 极淡暖灰
+const SNAKE_COLOR = getCSSColor("--color-snake-body", "#d6d0c4"); // 暖灰蛇身
+const SNAKE_HEAD_COLOR = getCSSColor("--color-primary", "#b45309"); // 琥珀蛇头
+const FOOD_COLOR = getCSSColor("--color-danger", "#dc2626"); // 食物红
 
 // 键盘 → 方向映射（模块级常量，只创建一次）
 const KEY_DIRECTION_MAP: Record<string, Direction> = {
@@ -53,7 +53,7 @@ const KEY_DIRECTION_MAP: Record<string, Direction> = {
 // ==================== 工具函数 ====================
 
 /** 方向对应的坐标偏移 */
-function directionDelta(d: Direction): Position {
+export function directionDelta(d: Direction): Position {
   switch (d) {
     case "UP":
       return { x: 0, y: -1 };
@@ -67,7 +67,7 @@ function directionDelta(d: Direction): Position {
 }
 
 /** 判断两个方向是否相反 */
-function isOpposite(a: Direction, b: Direction): boolean {
+export function isOpposite(a: Direction, b: Direction): boolean {
   return (
     (a === "UP" && b === "DOWN") ||
     (a === "DOWN" && b === "UP") ||
@@ -77,7 +77,7 @@ function isOpposite(a: Direction, b: Direction): boolean {
 }
 
 /** 随机生成食物位置，避开蛇身 */
-function randomFood(snake: Position[]): Position {
+export function randomFood(snake: Position[]): Position {
   const occupied = new Set(snake.map((p) => `${p.x},${p.y}`));
   const available: Position[] = [];
   for (let x = 0; x < GRID_SIZE; x++) {
@@ -94,7 +94,7 @@ function randomFood(snake: Position[]): Position {
 }
 
 /** 创建初始游戏状态 */
-function createInitialState(): GameState {
+export function createInitialState(): GameState {
   const mid = Math.floor(GRID_SIZE / 2);
   const snake: Position[] = [
     { x: mid, y: mid },
@@ -113,7 +113,7 @@ function createInitialState(): GameState {
 
 // ==================== Reducer ====================
 
-function snakeReducer(state: GameState, action: GameAction): GameState {
+export function snakeReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "START_GAME": {
       const initial = createInitialState();
@@ -294,21 +294,21 @@ export default function SnakeGame() {
       {/* 分数显示 */}
       <div className="flex items-center justify-between w-full max-w-[400px] mb-4 px-2">
         <div>
-          <span className="text-xs text-gray-400">当前得分</span>
-          <div className="text-2xl font-bold amount text-indigo-600">
+          <span className="text-xs text-stone-400 tracking-wide">当前得分</span>
+          <div className="text-2xl font-bold amount text-amber-600">
             {score}
           </div>
         </div>
         <div className="text-right">
-          <span className="text-xs text-gray-400">最高分</span>
-          <div className="text-lg font-semibold text-gray-500">
+          <span className="text-xs text-stone-400 tracking-wide">最高分</span>
+          <div className="text-lg font-semibold text-stone-500">
             {highScore}
           </div>
         </div>
       </div>
 
       {/* 游戏画布 + 覆盖层 */}
-      <div className="relative rounded-xl overflow-hidden shadow-lg border-4 border-indigo-200">
+      <div className="relative rounded-xl overflow-hidden shadow-lg border-4 border-stone-100">
         <Stage width={CANVAS_SIZE} height={CANVAS_SIZE}>
           <Layer>
             {/* 背景 */}
@@ -355,8 +355,8 @@ export default function SnakeGame() {
                 <p className="text-white text-lg font-bold mb-3">贪吃蛇</p>
                 <button
                   onClick={startGame}
-                  className="px-6 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg
-                             hover:bg-indigo-600 active:scale-95 transition-all cursor-pointer"
+                  className="px-6 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg
+                             hover:bg-amber-700 active:scale-95 transition-all cursor-pointer"
                 >
                   开始游戏
                 </button>
@@ -377,8 +377,8 @@ export default function SnakeGame() {
                 </p>
                 <button
                   onClick={startGame}
-                  className="px-6 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg
-                             hover:bg-indigo-600 active:scale-95 transition-all cursor-pointer"
+                  className="px-6 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg
+                             hover:bg-amber-700 active:scale-95 transition-all cursor-pointer"
                 >
                   重新开始
                 </button>
@@ -389,7 +389,7 @@ export default function SnakeGame() {
       </div>
 
       {/* 操作提示 */}
-      <p className="mt-4 text-xs text-gray-400">
+      <p className="mt-4 text-xs text-stone-400">
         方向键 ↑↓←→ 或 WASD 控制方向
       </p>
     </div>

@@ -61,27 +61,29 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen max-w-lg mx-auto bg-white shadow-lg">
-      {/* 顶部标题栏 */}
-      <header className="bg-indigo-500 text-white px-5 py-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">记账app</h1>
+    <div className="flex flex-col h-screen max-w-lg mx-auto bg-white shadow-xl shadow-stone-200/50">
+      {/* 顶部标题栏 — 纯白底 + 极细底线，像杂志刊头 */}
+      <header className="bg-white border-b border-stone-100 px-6 pt-5 pb-4">
+        <div className="flex items-end justify-between">
+          <h1 className="text-lg font-bold text-stone-800 tracking-wider">
+            记账
+          </h1>
           {activeTab === "home" && todayTotal > 0 && (
-            <span className="text-sm opacity-80">
-              今日支出{" "}
-              <span className="amount font-semibold">
+            <span className="text-xs text-stone-400 tracking-wide">
+              今日{" "}
+              <span className="amount text-sm font-semibold text-stone-700">
                 ¥{todayTotal.toFixed(2)}
               </span>
             </span>
           )}
           {activeTab === "stats" && (
-            <span className="text-sm opacity-80">月度统计</span>
+            <span className="text-xs text-stone-400 tracking-wide">月度统计</span>
           )}
           {activeTab === "settings" && (
-            <span className="text-sm opacity-80">设置</span>
+            <span className="text-xs text-stone-400 tracking-wide">设置</span>
           )}
           {activeTab === "game" && (
-            <span className="text-sm opacity-80">🐍 贪吃蛇</span>
+            <span className="text-xs text-stone-400 tracking-wide">贪吃蛇</span>
           )}
         </div>
       </header>
@@ -89,77 +91,81 @@ function App() {
       {/* 主内容区 */}
       <main className="flex-1 overflow-y-auto">
         {activeTab === "home" && (
-          <div className="p-4 space-y-5">
+          <div className="p-5 space-y-6">
             <ExpenseForm onSubmit={handleSubmit} categories={categories} />
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400">今日记录</span>
-              <div className="flex-1 h-px bg-gray-200" />
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-stone-100" />
+              <span className="text-xs text-stone-400 tracking-widest">
+                今日记录
+              </span>
+              <div className="flex-1 h-px bg-stone-100" />
             </div>
             <ExpenseList expenses={todayExpenses} />
             {submitting && (
-              <div className="text-center text-sm text-gray-400 py-2">保存中...</div>
+              <div className="text-center text-xs text-stone-400 py-2 animate-pulse">
+                保存中...
+              </div>
             )}
           </div>
         )}
         {activeTab === "stats" && (
-          <div className="p-4 h-full">
+          <div className="p-5 h-full">
             <StatsPage />
           </div>
         )}
         {activeTab === "settings" && (
-          <div className="p-4">
+          <div className="p-5">
             <SettingsPage onCategoriesChanged={handleCategoriesChanged} />
           </div>
         )}
         {activeTab === "game" && (
-          <div className="p-4 h-full">
+          <div className="p-5 h-full">
             <SnakeGame />
           </div>
         )}
       </main>
 
-      {/* 底部导航栏 */}
-      <nav className="flex border-t border-gray-200 bg-white">
+      {/* 底部导航栏 — 极简，只有文字 + 细线 */}
+      <nav className="flex border-t border-stone-100 bg-white">
         <button
           onClick={() => setActiveTab("home")}
-          className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-center text-xs font-medium tracking-wide transition-colors ${
             activeTab === "home"
-              ? "text-indigo-500 border-t-2 border-indigo-500 -mt-px"
-              : "text-gray-500 hover:text-gray-700"
+              ? "text-amber-600 border-t-2 border-amber-600 -mt-px"
+              : "text-stone-400 hover:text-stone-600"
           }`}
         >
-          📝 记账
+          记账
         </button>
         <button
           onClick={() => setActiveTab("stats")}
-          className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-center text-xs font-medium tracking-wide transition-colors ${
             activeTab === "stats"
-              ? "text-indigo-500 border-t-2 border-indigo-500 -mt-px"
-              : "text-gray-500 hover:text-gray-700"
+              ? "text-amber-600 border-t-2 border-amber-600 -mt-px"
+              : "text-stone-400 hover:text-stone-600"
           }`}
         >
-          📊 统计
+          统计
         </button>
         <button
           onClick={() => setActiveTab("settings")}
-          className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-center text-xs font-medium tracking-wide transition-colors ${
             activeTab === "settings"
-              ? "text-indigo-500 border-t-2 border-indigo-500 -mt-px"
-              : "text-gray-500 hover:text-gray-700"
+              ? "text-amber-600 border-t-2 border-amber-600 -mt-px"
+              : "text-stone-400 hover:text-stone-600"
           }`}
         >
-          ⚙️ 设置
+          设置
         </button>
         <button
           onClick={() => setActiveTab("game")}
-          className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
+          className={`flex-1 py-3 text-center text-xs font-medium tracking-wide transition-colors ${
             activeTab === "game"
-              ? "text-indigo-500 border-t-2 border-indigo-500 -mt-px"
-              : "text-gray-500 hover:text-gray-700"
+              ? "text-amber-600 border-t-2 border-amber-600 -mt-px"
+              : "text-stone-400 hover:text-stone-600"
           }`}
         >
-          🎮 游戏
+          游戏
         </button>
       </nav>
     </div>

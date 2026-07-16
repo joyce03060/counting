@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 质量门禁标记文件（不提交）
+.claude/results/

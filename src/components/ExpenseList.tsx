@@ -11,10 +11,9 @@ interface Props {
 export default function ExpenseList({ expenses, onDelete, showDelete = false }: Props) {
   if (expenses.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-400">
-        <div className="text-5xl mb-3">📭</div>
-        <p className="text-sm">暂无支出记录</p>
-        <p className="text-xs mt-1">记下今天的第一笔花销吧</p>
+      <div className="text-center py-16 text-stone-300">
+        <div className="text-4xl mb-4 opacity-40">—</div>
+        <p className="text-sm text-stone-400">暂无记录</p>
       </div>
     );
   }
@@ -32,9 +31,8 @@ export default function ExpenseList({ expenses, onDelete, showDelete = false }: 
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {grouped.map((group) => {
-        // 格式化日期显示
         const today = new Date().toISOString().slice(0, 10);
         const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
         let dateLabel: string;
@@ -53,57 +51,60 @@ export default function ExpenseList({ expenses, onDelete, showDelete = false }: 
 
         return (
           <div key={group.date}>
-            {/* 日期标题行 */}
-            <div className="flex items-center justify-between mb-2 px-1">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-gray-700">
+            {/* 日期标题行 — 杂志排版感 */}
+            <div className="flex items-end justify-between mb-2 px-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-sm font-semibold text-stone-700">
                   {dateLabel}
                 </span>
-                <span className="text-xs text-gray-400">{dayOfWeek}</span>
+                <span className="text-xs text-stone-400">{dayOfWeek}</span>
               </div>
-              <span className="text-sm text-gray-500">
-                支出 <span className="amount font-semibold text-gray-700">¥{group.total.toFixed(2)}</span>
+              <span className="text-xs text-stone-400">
+                支出{" "}
+                <span className="amount text-sm font-semibold text-stone-600">
+                  ¥{group.total.toFixed(2)}
+                </span>
               </span>
             </div>
 
-            {/* 支出条目列表 */}
-            <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            {/* 支出条目 — 极简卡片 */}
+            <div className="bg-white rounded-lg border border-stone-100 overflow-hidden">
               {group.items.map((expense) => {
                 const icon = getCategoryIcon(expense.categoryL1, expense.categoryL2);
                 return (
                   <div
                     key={expense.id}
-                    className="flex items-center justify-between px-4 py-3 border-b border-gray-50 last:border-b-0 hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-between px-4 py-3
+                               border-b border-stone-50 last:border-b-0
+                               hover:bg-stone-50/50 transition-colors"
                   >
-                    {/* 图标和分类 */}
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">
+                      <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-base">
                         {icon}
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-700">
+                        <div className="text-sm font-medium text-stone-700">
                           {expense.categoryL2}
                         </div>
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-stone-400">
                           {expense.categoryL1}
                           {expense.note && ` · ${expense.note}`}
                         </div>
                       </div>
                     </div>
 
-                    {/* 金额和删除 */}
                     <div className="flex items-center gap-2">
-                      <span className="amount text-base font-semibold text-gray-800">
+                      <span className="amount text-sm font-semibold text-stone-700">
                         -¥{expense.amount.toFixed(2)}
                       </span>
                       {showDelete && onDelete && (
                         <button
                           type="button"
                           onClick={() => onDelete(expense.id)}
-                          className="text-gray-300 hover:text-red-400 transition-colors text-sm px-1"
+                          className="text-stone-200 hover:text-red-400 transition-colors text-xs px-1"
                           title="删除"
                         >
-                          🗑
+                          ✕
                         </button>
                       )}
                     </div>

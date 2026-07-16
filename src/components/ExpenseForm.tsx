@@ -55,35 +55,32 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
     }
 
     onSubmit({
-      amount: Math.round(amountNum * 100) / 100, // 保留两位小数
+      amount: Math.round(amountNum * 100) / 100,
       categoryL1,
       categoryL2,
       date,
       note: note.trim(),
     });
 
-    // 重置表单（保留日期方便连续记账）
     setAmount("");
     setCategoryL1("");
     setCategoryL2("");
     setNote("");
 
-    // 滚动列表到顶部
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // 常用金额快捷按钮
   const quickAmounts = [10, 20, 50, 100, 200];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* 金额输入 */}
+      {/* 金额输入 — 杂志风核心：数字是主角 */}
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          金额 <span className="text-red-400">*</span>
+        <label className="block text-xs font-medium text-stone-500 mb-2 tracking-wide">
+          金额
         </label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg font-medium">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-xl font-light">
             ¥
           </span>
           <input
@@ -97,12 +94,14 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
             placeholder="0.00"
             step="0.01"
             min="0.01"
-            className="w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-lg text-lg font-medium focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-stone-200 rounded-lg text-2xl font-medium amount
+                       bg-stone-50/50
+                       focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 focus:bg-white
+                       transition-colors"
             autoFocus
           />
         </div>
-        {/* 快捷金额 */}
-        <div className="flex gap-1.5 mt-2">
+        <div className="flex gap-2 mt-2">
           {quickAmounts.map((n) => (
             <button
               key={n}
@@ -111,7 +110,8 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
                 setAmount(String(n));
                 setError("");
               }}
-              className="flex-1 py-1.5 text-xs font-medium text-gray-500 bg-gray-100 rounded-md hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+              className="flex-1 py-1.5 text-xs font-medium text-stone-500 bg-stone-50 rounded-md
+                         hover:bg-amber-50 hover:text-amber-700 transition-colors"
             >
               ¥{n}
             </button>
@@ -121,8 +121,8 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
 
       {/* 分类选择 */}
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          分类 <span className="text-red-400">*</span>
+        <label className="block text-xs font-medium text-stone-500 mb-2 tracking-wide">
+          分类
         </label>
         <CategoryPicker
           categories={categories}
@@ -135,8 +135,8 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
       {/* 日期和备注一行 */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            日期 <span className="text-red-400">*</span>
+          <label className="block text-xs font-medium text-stone-500 mb-2 tracking-wide">
+            日期
           </label>
           <input
             type="date"
@@ -146,11 +146,14 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
               setDate(e.target.value);
               setError("");
             }}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+            className="w-full px-3 py-2.5 border border-stone-200 rounded-lg text-sm text-stone-700
+                       bg-stone-50/50
+                       focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 focus:bg-white
+                       transition-colors"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="block text-xs font-medium text-stone-500 mb-2 tracking-wide">
             备注
           </label>
           <input
@@ -162,22 +165,26 @@ export default function ExpenseForm({ onSubmit, categories }: Props) {
             }}
             placeholder="选填"
             maxLength={200}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+            className="w-full px-3 py-2.5 border border-stone-200 rounded-lg text-sm text-stone-700
+                       bg-stone-50/50 placeholder:text-stone-300
+                       focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 focus:bg-white
+                       transition-colors"
           />
         </div>
       </div>
 
       {/* 错误提示 */}
       {error && (
-        <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+        <div className="px-3 py-2 bg-red-50 border border-red-100 rounded-lg text-xs text-red-600">
           {error}
         </div>
       )}
 
-      {/* 提交按钮 */}
+      {/* 提交按钮 — 唯一使用强调色的地方 */}
       <button
         type="submit"
-        className="w-full py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 active:bg-indigo-700 transition-colors text-base"
+        className="w-full py-3 bg-amber-600 text-white text-sm font-medium rounded-lg
+                   hover:bg-amber-700 active:bg-amber-800 transition-colors tracking-wide"
       >
         记一笔
       </button>

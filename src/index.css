@@ -1,16 +1,38 @@
 @import "tailwindcss";
 
-/* 记账app - 全局样式 */
+/* 记账app — 杂志极简风 全局样式 */
+
+/* ---- 设计令牌 ---- */
 :root {
-  --color-primary: #6366f1;
-  --color-bg: #f8fafc;
+  /* 强调色：暖琥珀（只在最重要的地方出现） */
+  --color-primary: #b45309;
+  --color-primary-hover: #92400e;
+  --color-primary-light: #fffbeb;
+
+  /* 背景：暖米白，像杂志纸 */
+  --color-bg: #faf8f5;
   --color-card: #ffffff;
-  --color-text: #1e293b;
-  --color-text-secondary: #64748b;
-  --color-danger: #ef4444;
-  --color-success: #22c55e;
+
+  /* 文字：暖炭灰，不是死黑 */
+  --color-text: #2d2a26;
+  --color-text-secondary: #8c8880;
+  --color-text-muted: #b8b3ab;
+
+  /* 分割线：极淡暖灰 */
+  --color-border: #ebe7e0;
+  --color-border-light: #f3f0eb;
+
+  /* 功能色 */
+  --color-danger: #dc2626;
+  --color-success: #16a34a;
+
+  /* 蛇游戏专用 */
+  --color-snake-bg: #f5f2ed;
+  --color-snake-grid: #ebe7e0;
+  --color-snake-body: #d6d0c4;
 }
 
+/* ---- 基础 ---- */
 body {
   margin: 0;
   padding: 0;
@@ -22,20 +44,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 金额数字等宽字体 */
+/* ---- 金额数字（杂志风核心记忆点） ---- */
 .amount {
   font-variant-numeric: tabular-nums;
   font-family: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
+  letter-spacing: 0.02em;
 }
 
-/* 自定义滚动条 */
+/* ---- 自定义滚动条（暖灰） ---- */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: var(--color-text-muted);
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--color-text-secondary);
 }
