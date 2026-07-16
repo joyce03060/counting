@@ -30,7 +30,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Skill",
+        "matcher": "Bash(git *)",
         "hooks": [
           {
             "type": "command",
